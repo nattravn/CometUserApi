@@ -1,0 +1,85 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "CometUserDBContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Entities",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "CometUserAPI",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[Category]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_customer]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_designation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_employee]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_menu]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_permission]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_product]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_product_image]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_refreshtoken]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_role]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tbl_user]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "desktop-dfch8n8\\sqlexpress.CometUserDB.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}
