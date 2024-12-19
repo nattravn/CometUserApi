@@ -12,7 +12,7 @@ namespace CometUserAPI.Controllers
 {
     [Authorize]
     //[DisableCors]
-    [EnableRateLimiting("fixedWindow")]
+    //[EnableRateLimiting("fixedWindow")]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase
@@ -37,6 +37,8 @@ namespace CometUserAPI.Controllers
             return Ok(data);
 
         }
+
+        //[DisableRateLimiting]
 
         [HttpGet("GetByCode")]
         public async Task<IActionResult> GetByCode(string code)

@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
 
+// Tutorial https://www.youtube.com/watch?v=zNRVz7dgfuE
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -67,13 +69,13 @@ builder.Services.AddCors(p => p.AddDefaultPolicy(build =>
 }
 ));
 
-builder.Services.AddRateLimiter(_ => _.AddFixedWindowLimiter(policyName: "fixedWindow", options =>
-{
-    options.Window = TimeSpan.FromSeconds(1);
-    options.PermitLimit = 1;
-    options.QueueLimit = 0;
-    options.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
-}).RejectionStatusCode = 401);
+//builder.Services.AddRateLimiter(_ => _.AddFixedWindowLimiter(policyName: "fixedWindow", options =>
+//{
+//    options.Window = TimeSpan.FromSeconds(10);
+//    options.PermitLimit = 1;
+//    options.QueueLimit = 0;
+//    options.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
+//}).RejectionStatusCode = 401);
 
 string logpath = builder.Configuration.GetSection("Logging:Logpath").Value ?? "";
 var _logger = new LoggerConfiguration()
