@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -43,7 +44,7 @@ namespace CometUserAPI.Controllers
                         new Claim(ClaimTypes.Name, user.Userid),
                         new Claim(ClaimTypes.Role, user.Role)
                     }),
-                    Expires = DateTime.UtcNow.AddSeconds(30),
+                    Expires = DateTime.Now.AddSeconds(3000),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256)
                 };
                 var token = tokenHandler.CreateToken(tokendesc);
