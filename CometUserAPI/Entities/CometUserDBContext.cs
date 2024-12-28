@@ -13,41 +13,33 @@ public partial class CometUserDBContext : DbContext
     {
     }
 
-    public virtual DbSet<Category> Categories { get; set; }
-
     public virtual DbSet<TblCustomer> TblCustomers { get; set; }
-
-    public virtual DbSet<TblDesignation> TblDesignations { get; set; }
-
-    public virtual DbSet<TblEmployee> TblEmployees { get; set; }
 
     public virtual DbSet<TblMenu> TblMenus { get; set; }
 
-    public virtual DbSet<TblPermission> TblPermissions { get; set; }
+    public virtual DbSet<TblOtpManager> TblOtpManagers { get; set; }
 
     public virtual DbSet<TblProduct> TblProducts { get; set; }
 
-    public virtual DbSet<TblProductImage> TblProductImages { get; set; }
+    public virtual DbSet<TblProductimage> TblProductimages { get; set; }
+
+    public virtual DbSet<TblPwdManger> TblPwdMangers { get; set; }
 
     public virtual DbSet<TblRefreshtoken> TblRefreshtokens { get; set; }
 
     public virtual DbSet<TblRole> TblRoles { get; set; }
 
+    public virtual DbSet<TblRolepermission> TblRolepermissions { get; set; }
+
+    public virtual DbSet<TblTempuser> TblTempusers { get; set; }
+
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<TblCustomer>(entity =>
+        modelBuilder.Entity<TblTempuser>(entity =>
         {
-            entity.HasKey(e => e.Code).HasName("PK_tbl_customer_1");
-
-            entity.Property(e => e.CreditLimit).HasDefaultValueSql("((0))");
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-        });
-
-        modelBuilder.Entity<TblUser>(entity =>
-        {
-            entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            entity.HasKey(e => e.Id).HasName("tbl_tempuser1");
         });
 
         OnModelCreatingPartial(modelBuilder);

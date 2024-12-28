@@ -103,7 +103,7 @@ namespace CometUserAPI.Container
                     _customer.Email = data.Email;
                     _customer.Phone = data.Phone;
                     _customer.IsActive = data.IsActive;
-                    _customer.CreditLimit = data.CreditLimit;
+                    //_customer.CreditLimit = data.CreditLimit;
                     await this._context.SaveChangesAsync();
                     response.ResponseCode = 201;
                     response.Result = code;

@@ -12,31 +12,43 @@ namespace CometUserAPI.Entities;
 public partial class TblUser
 {
     [Key]
-    [Column("userid")]
+    [Column("username")]
     [StringLength(50)]
     [Unicode(false)]
-    public string Userid { get; set; }
+    public string Username { get; set; }
 
-    [StringLength(50)]
+    [Required]
+    [Column("name")]
+    [StringLength(250)]
     [Unicode(false)]
     public string Name { get; set; }
+
+    [Column("email")]
+    [StringLength(100)]
+    [Unicode(false)]
+    public string Email { get; set; }
+
+    [Column("phone")]
+    [StringLength(20)]
+    [Unicode(false)]
+    public string Phone { get; set; }
 
     [Column("password")]
     [StringLength(50)]
     [Unicode(false)]
     public string Password { get; set; }
 
-    [StringLength(50)]
-    [Unicode(false)]
-    public string Email { get; set; }
+    [Column("isactive")]
+    public bool? Isactive { get; set; }
 
+    [Column("role")]
     [StringLength(50)]
     [Unicode(false)]
     public string Role { get; set; }
 
-    public bool? IsActive { get; set; }
+    [Column("islocked")]
+    public bool? Islocked { get; set; }
 
-    [StringLength(50)]
-    [Unicode(false)]
-    public string Code { get; set; }
+    [Column("failattempt")]
+    public int? Failattempt { get; set; }
 }

@@ -12,12 +12,15 @@ namespace CometUserAPI.Entities;
 public partial class TblProduct
 {
     [Key]
-    public int Code { get; set; }
-
+    [Column("code")]
     [StringLength(50)]
+    [Unicode(false)]
+    public string Code { get; set; }
+
+    [Column("name")]
     [Unicode(false)]
     public string Name { get; set; }
 
-    [Column(TypeName = "decimal(18, 3)")]
-    public decimal? Amount { get; set; }
+    [Column("price", TypeName = "decimal(18, 2)")]
+    public decimal? Price { get; set; }
 }

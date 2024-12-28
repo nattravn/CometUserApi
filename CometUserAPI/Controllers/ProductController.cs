@@ -100,10 +100,10 @@ namespace CometUserAPI.Controllers
                     using(MemoryStream stream = new MemoryStream())
                     {
                         await file.CopyToAsync(stream);
-                        this._dbContext.TblProductImages.Add(new TblProductImage()
+                        this._dbContext.TblProductimages.Add(new TblProductimage()
                         {
-                            ProductCode = productCode,
-                            ProductImage = stream.ToArray()
+                            Productcode = productCode,
+                            Productimage = stream.ToArray()
                         });
                         await this._dbContext.SaveChangesAsync();
                         passCount++;
@@ -271,12 +271,12 @@ namespace CometUserAPI.Controllers
             List<string> ImageUrl = new List<string>();
             try
             {
-                var _productImage = this._dbContext.TblProductImages.Where(item => item.ProductCode == productCode).ToList();
+                var _productImage = this._dbContext.TblProductimages.Where(item => item.Productcode == productCode).ToList();
                 if(_productImage != null && _productImage.Count > 0) 
                 {
                     _productImage.ForEach(item =>
                     {
-                        ImageUrl.Add(Convert.ToBase64String(item.ProductImage));
+                        ImageUrl.Add(Convert.ToBase64String(item.Productimage));
                     });
 
                     string Filepath = GetFilePath(productCode);
@@ -312,10 +312,10 @@ namespace CometUserAPI.Controllers
         {
             try
             {
-                var _productImage = await this._dbContext.TblProductImages.FirstOrDefaultAsync(item => item.ProductCode == productCode);
+                var _productImage = await this._dbContext.TblProductimages.FirstOrDefaultAsync(item => item.Productcode == productCode);
                 if (_productImage != null)
                 {
-                    return File(_productImage.ProductImage, "image/png", productCode + ".png");
+                    return File(_productImage.Productimage, "image/png", productCode + ".png");
                 }
 
                 else

@@ -12,12 +12,15 @@ namespace CometUserAPI.Entities;
 public partial class TblRole
 {
     [Key]
-    [Column("roleid")]
+    [Column("code")]
     [StringLength(50)]
-    [Unicode(false)]
-    public string Roleid { get; set; }
+    public string Code { get; set; }
 
-    [StringLength(50)]
-    [Unicode(false)]
+    [Required]
+    [Column("name")]
+    [StringLength(200)]
     public string Name { get; set; }
+
+    [Column("status")]
+    public bool? Status { get; set; }
 }

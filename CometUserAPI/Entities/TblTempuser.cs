@@ -8,29 +8,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CometUserAPI.Entities;
 
-[Table("tbl_employee")]
-public partial class TblEmployee
+[Table("tbl_tempuser")]
+public partial class TblTempuser
 {
     [Key]
-    [Column("code")]
-    public int Code { get; set; }
+    [Column("id")]
+    public int Id { get; set; }
 
-    [Column("name")]
+    [Required]
+    [Column("code")]
     [StringLength(50)]
+    [Unicode(false)]
+    public string Code { get; set; }
+
+    [Required]
+    [Column("name")]
+    [StringLength(250)]
     [Unicode(false)]
     public string Name { get; set; }
 
     [Column("email")]
-    [StringLength(50)]
+    [StringLength(100)]
     [Unicode(false)]
     public string Email { get; set; }
 
-    [StringLength(50)]
+    [Column("phone")]
+    [StringLength(20)]
     [Unicode(false)]
     public string Phone { get; set; }
 
-    [Column("designation")]
+    [Column("password")]
     [StringLength(50)]
     [Unicode(false)]
-    public string Designation { get; set; }
+    public string Password { get; set; }
 }

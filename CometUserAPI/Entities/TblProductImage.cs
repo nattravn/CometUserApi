@@ -8,18 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CometUserAPI.Entities;
 
-[Table("tbl_product_image")]
-public partial class TblProductImage
+[Table("tbl_productimage")]
+public partial class TblProductimage
 {
-    [Column("productCode")]
-    [StringLength(50)]
-    [Unicode(false)]
-    public string ProductCode { get; set; }
-
-    [Column("productImage", TypeName = "image")]
-    public byte[] ProductImage { get; set; }
-
     [Key]
     [Column("id")]
     public int Id { get; set; }
+
+    [Column("productcode")]
+    [StringLength(50)]
+    [Unicode(false)]
+    public string Productcode { get; set; }
+
+    [Column("productimage", TypeName = "image")]
+    public byte[] Productimage { get; set; }
 }

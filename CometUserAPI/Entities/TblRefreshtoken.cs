@@ -12,15 +12,17 @@ namespace CometUserAPI.Entities;
 public partial class TblRefreshtoken
 {
     [Key]
+    [Column("userid")]
     [StringLength(50)]
     [Unicode(false)]
-    public string UserId { get; set; }
+    public string Userid { get; set; }
 
+    [Column("tokenid")]
     [StringLength(50)]
     [Unicode(false)]
-    public string TokenId { get; set; }
+    public string Tokenid { get; set; }
 
-    public string RefreshToken { get; set; }
-
-    public bool? IsActive { get; set; }
+    [Column("refreshtoken")]
+    [Unicode(false)]
+    public string Refreshtoken { get; set; }
 }

@@ -11,9 +11,12 @@ namespace CometUserAPI.Entities;
 [Table("tbl_customer")]
 public partial class TblCustomer
 {
-    [Column("ID")]
-    public int Id { get; set; }
+    [Key]
+    [StringLength(50)]
+    [Unicode(false)]
+    public string Code { get; set; }
 
+    [Required]
     [StringLength(50)]
     [Unicode(false)]
     public string Name { get; set; }
@@ -26,12 +29,10 @@ public partial class TblCustomer
     [Unicode(false)]
     public string Phone { get; set; }
 
-    public int? CreditLimit { get; set; }
+    [Column(TypeName = "decimal(18, 2)")]
+    public decimal? Creditlimit { get; set; }
 
     public bool? IsActive { get; set; }
 
-    [Key]
-    [StringLength(50)]
-    [Unicode(false)]
-    public string Code { get; set; }
+    public int? Taxcode { get; set; }
 }

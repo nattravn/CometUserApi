@@ -8,11 +8,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CometUserAPI.Entities;
 
-[Table("Category")]
-public partial class Category
+[Table("tbl_pwdManger")]
+public partial class TblPwdManger
 {
     [Key]
+    [Column("id")]
     public int Id { get; set; }
 
-    public string Name { get; set; }
+    [Required]
+    [Column("username")]
+    [StringLength(50)]
+    public string Username { get; set; }
+
+    [Required]
+    [Column("password")]
+    [StringLength(200)]
+    public string Password { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? ModifyDate { get; set; }
 }

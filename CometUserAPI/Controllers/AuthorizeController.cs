@@ -1,4 +1,5 @@
-﻿using CometUserAPI.Container;
+﻿using ClosedXML;
+using CometUserAPI.Container;
 using CometUserAPI.Entities;
 using CometUserAPI.Model;
 using CometUserAPI.Service;
@@ -31,7 +32,7 @@ namespace CometUserAPI.Controllers
         [HttpPost("GenerateToken")]
         public async Task<IActionResult> GenerateToken([FromBody] UserCred userCred)
         {
-            var user = await this._dbContext.TblUsers.FirstOrDefaultAsync(item => item.Userid == userCred.username && item.Password == userCred.password);
+            var user = await this._dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == userCred.username && item.Password == userCred.password);
             if (user != null)
             {
                 //generate token
@@ -41,7 +42,7 @@ namespace CometUserAPI.Controllers
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                        new Claim(ClaimTypes.Name, user.Userid),
+                        new Claim(ClaimTypes.Name, user.Username),
                         new Claim(ClaimTypes.Role, user.Role)
                     }),
                     Expires = DateTime.Now.AddSeconds(3000),
@@ -61,7 +62,7 @@ namespace CometUserAPI.Controllers
         [HttpPost("GenerateRefreshToken")]
         public async Task<IActionResult> GenerateToken([FromBody] TokenResponse token)
         {
-            var _refreshToken = await this._dbContext.TblRefreshtokens.FirstOrDefaultAsync(item => item.RefreshToken == token.RefreshToken);
+            var _refreshToken = await this._dbContext.TblRefreshtokens.FirstOrDefaultAsync(item => item.Refreshtoken == token.RefreshToken);
             if (_refreshToken != null)
             {
                 //generate token
@@ -80,8 +81,8 @@ namespace CometUserAPI.Controllers
                 if (_token != null && _token.Header.Alg.Equals(SecurityAlgorithms.HmacSha256))
                 {
                     string username = principle.Identity?.Name;
-                    var _existingdata = await this._dbContext.TblRefreshtokens.FirstOrDefaultAsync(item => item.UserId == username 
-                    && item.RefreshToken == token.RefreshToken);
+                    var _existingdata = await this._dbContext.TblRefreshtokens.FirstOrDefaultAsync(item => item.Userid == username 
+                    && item.Refreshtoken == token.RefreshToken);
                     if(_existingdata != null)
                     {
                         var _newToken = new JwtSecurityToken(

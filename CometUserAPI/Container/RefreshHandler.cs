@@ -18,17 +18,17 @@ namespace CometUserAPI.Container
             {
                 randomNumberGenerator.GetBytes(randomnumber);
                 string refreshToken = Convert.ToBase64String(randomnumber);
-                var existingToken = this._dbContext.TblRefreshtokens.FirstOrDefaultAsync(item => item.UserId == username).Result;
+                var existingToken = this._dbContext.TblRefreshtokens.FirstOrDefaultAsync(item => item.Userid == username).Result;
                 if (existingToken != null)
                 {
-                    existingToken.RefreshToken = refreshToken;
+                    existingToken.Refreshtoken = refreshToken;
                 } else
                 {
                     await this._dbContext.TblRefreshtokens.AddAsync(new TblRefreshtoken
                     {
-                        UserId = username,
-                        TokenId = new Random().Next().ToString(),
-                        RefreshToken = refreshToken
+                        Userid = username,
+                        Tokenid = new Random().Next().ToString(),
+                        Refreshtoken = refreshToken
                     });
                 }
                 await this._dbContext.SaveChangesAsync();
