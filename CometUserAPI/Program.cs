@@ -6,13 +6,19 @@ using CometUserAPI.Model;
 using CometUserAPI.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
+using System.Security;
 using System.Text;
 
 // Tutorial https://www.youtube.com/watch?v=zNRVz7dgfuE
+// https://www.youtube.com/watch?v=SIdgC4bqNZ4&t=1659s
+// https://www.youtube.com/watch?v=8J3nuUegtL4
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,12 +27,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<IRefreshHandler, RefreshHandler>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUserRoleService, UserRoleService>();
 builder.Services.AddDbContext<CometUserDBContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("apicon")));
+//builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("apicon2")));
 
-//builder.Services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+//builder.Services.AddAuthorization();
+
+//builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 var _authkey = builder.Configuration.GetValue<string>("JwtSettings:securitykey");
 
@@ -77,6 +97,12 @@ builder.Services.AddCors(p => p.AddDefaultPolicy(build =>
 //    options.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
 //}).RejectionStatusCode = 401);
 
+builder.Services.AddRateLimiter(o => o
+    .AddFixedWindowLimiter(policyName: "fixed", options =>
+    {
+        // configuration
+    }));
+
 string logpath = builder.Configuration.GetSection("Logging:Logpath").Value ?? "";
 var _logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -111,12 +137,12 @@ app.MapPost("/createcustomer", async (CometUserDBContext db, TblCustomer costume
 });
 app.MapPut("/updatecustomer/{code}", async (CometUserDBContext db, TblCustomer costumer, string code) => {
     var existdata = await db.TblCustomers.FindAsync(code);
-    if(existdata != null)
+    if (existdata != null)
     {
         existdata.Name = costumer.Name;
         existdata.Email = costumer.Email;
         existdata.Phone = costumer.Phone;
-        existdata.CreditLimit = costumer.CreditLimit;
+        //existdata.CreditLimit = costumer.CreditLimit;
     }
     await db.SaveChangesAsync();
 });
@@ -128,21 +154,21 @@ app.MapDelete("/deletecustomer/{code}", async (CometUserDBContext db, string cod
     }
     await db.SaveChangesAsync();
 });
-app.UseRateLimiter();
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
-app.UseCors();
+}
+
+//app.MapIdentityApi<User>();
 
 app.UseCors();
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 
 app.UseAuthorization();
 
