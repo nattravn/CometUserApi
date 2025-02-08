@@ -1,4 +1,5 @@
-﻿using CometUserAPI.Entities;
+﻿using AutoMapper;
+using CometUserAPI.Entities;
 using CometUserAPI.Helper;
 using CometUserAPI.Model;
 using CometUserAPI.Service;
@@ -9,9 +10,11 @@ namespace CometUserAPI.Container
     public class UserService : IUserService
     {
         private readonly CometUserDBContext _dbContext;
-        public UserService(CometUserDBContext context)
+        private readonly IMapper mapper;
+        public UserService(CometUserDBContext context, IMapper mapper)
         {
             this._dbContext = context;
+            this.mapper = mapper;
         }
 
         public async Task<APIResponse> ConfirmRegistration(int userId, string userName, string otpText)
@@ -133,7 +136,7 @@ namespace CometUserAPI.Container
         public async Task<APIResponse> ForgetPassword(string userName)
         {
             APIResponse response = new APIResponse();
-            var _user = await this._dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == userName && item.Islocked == true);
+            var _user = await this._dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == userName && item.Islocked != true);
             if(_user != null)
             {
                 string otptext = GenerateRandomNumber();
@@ -285,6 +288,28 @@ namespace CometUserAPI.Container
                 }
             }
             return response;
+        }
+
+        public async Task<List<UserModel>> GetAll()
+        {
+            List<UserModel> _response = new List<UserModel>();
+            var _data = await this._dbContext.TblUsers.ToListAsync();
+            if (_data != null)
+            {
+                _response = this.mapper.Map<List<TblUser>, List<UserModel>>(_data);
+            }
+            return _response;
+        }
+
+        public async Task<UserModel> GetByCode(string code)
+        {
+            UserModel _response = new UserModel();
+            var _data = await this._dbContext.TblUsers.FindAsync(code);
+            if (_data != null)
+            {
+                _response = this.mapper.Map<TblUser, UserModel>(_data);
+            }
+            return _response;
         }
     }
 

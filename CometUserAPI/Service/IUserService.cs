@@ -12,5 +12,7 @@ namespace CometUserAPI.Service
         Task<APIResponse> UpdatePassword(string userName, string password, string otptext);
         Task<APIResponse> UpdateStatus(string userName, bool userStatus);
         Task<APIResponse> UpdateRole(string userName, string userRole);
+        Task<List<UserModel>> GetAll();
+        Task<UserModel> GetByCode(string code);
     }
 }

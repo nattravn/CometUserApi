@@ -63,5 +63,27 @@ namespace CometUserAPI.Controllers
             var data = await this._userService.UpdateRole(userName, role);
             return Ok(data);
         }
+
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var data = await this._userService.GetAll();
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return Ok(data);
+        }
+
+        [HttpGet("Getbycode")]
+        public async Task<IActionResult> GetByCode(string code)
+        {
+            var data = await this._userService.GetByCode(code);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return Ok(data);
+        }
     }
 }
