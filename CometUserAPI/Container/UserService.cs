@@ -1,7 +1,9 @@
-﻿using CometUserAPI.Entities;
+﻿using AutoMapper;
+using CometUserAPI.Entities;
 using CometUserAPI.Helper;
 using CometUserAPI.Model;
 using CometUserAPI.Service;
+using MailKit;
 using Microsoft.EntityFrameworkCore;
 
 namespace CometUserAPI.Container
@@ -9,9 +11,13 @@ namespace CometUserAPI.Container
     public class UserService : IUserService
     {
         private readonly CometUserDBContext _dbContext;
-        public UserService(CometUserDBContext context)
+        private readonly IMapper mapper;
+        private readonly IEmailService emailServices;
+        public UserService(CometUserDBContext context, IMapper mapper, IEmailService emailServices)
         {
             this._dbContext = context;
+            this.mapper = mapper;
+            this.emailServices = emailServices;
         }
 
         public async Task<APIResponse> ConfirmRegistration(int userId, string userName, string otpText)
@@ -133,7 +139,7 @@ namespace CometUserAPI.Container
         public async Task<APIResponse> ForgetPassword(string userName)
         {
             APIResponse response = new APIResponse();
-            var _user = await this._dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == userName && item.Islocked == true);
+            var _user = await this._dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == userName && item.Islocked != true);
             if(_user != null)
             {
                 string otptext = GenerateRandomNumber();
@@ -268,7 +274,22 @@ namespace CometUserAPI.Container
 
         private async Task SendOtpMail(string userEmail, string optText, string name)
         {
+            var mailRequest = new MailRequest();
+            mailRequest.Email = userEmail;
+            mailRequest.Subject = "Thanks for registering : OPT";
+            mailRequest.EmailBody = GenerateEmailBody(name, optText);
+            await this.emailServices.SendEmail(mailRequest);
+        }
 
+        private string GenerateEmailBody(string name, string optText)
+        {
+            string emailBody = string.Empty;
+            emailBody = "<div style='width:100%; background-color:grey'>";
+            emailBody += "<h1>Hi " + name + ", Thanks for registering</h1>";
+            emailBody += "<h2>Please enter OPT text and complete registration</h2>";
+            emailBody += "<h2>QTP Text is : " + optText  + "</h2>";
+            emailBody += "</div>";
+            return emailBody;
         }
 
         private async Task<bool> ValidatePwdHistory(string userName, string password)
@@ -285,6 +306,28 @@ namespace CometUserAPI.Container
                 }
             }
             return response;
+        }
+
+        public async Task<List<UserModel>> GetAll()
+        {
+            List<UserModel> _response = new List<UserModel>();
+            var _data = await this._dbContext.TblUsers.ToListAsync();
+            if (_data != null)
+            {
+                _response = this.mapper.Map<List<TblUser>, List<UserModel>>(_data);
+            }
+            return _response;
+        }
+
+        public async Task<UserModel> GetByCode(string code)
+        {
+            UserModel _response = new UserModel();
+            var _data = await this._dbContext.TblUsers.FindAsync(code);
+            if (_data != null)
+            {
+                _response = this.mapper.Map<TblUser, UserModel>(_data);
+            }
+            return _response;
         }
     }
 
