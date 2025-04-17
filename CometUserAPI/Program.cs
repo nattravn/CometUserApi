@@ -37,11 +37,14 @@ builder.Services.AddSwaggerGen(options =>
     });
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<IRefreshHandler, RefreshHandler>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRoleService, UserRoleService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddDbContext<CometUserDBContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("apicon")));
+
 //builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("apicon2")));
 
 //builder.Services.AddAuthorization();

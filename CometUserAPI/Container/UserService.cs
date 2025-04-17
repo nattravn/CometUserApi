@@ -3,6 +3,7 @@ using CometUserAPI.Entities;
 using CometUserAPI.Helper;
 using CometUserAPI.Model;
 using CometUserAPI.Service;
+using MailKit;
 using Microsoft.EntityFrameworkCore;
 
 namespace CometUserAPI.Container
@@ -11,10 +12,12 @@ namespace CometUserAPI.Container
     {
         private readonly CometUserDBContext _dbContext;
         private readonly IMapper mapper;
-        public UserService(CometUserDBContext context, IMapper mapper)
+        private readonly IEmailService emailServices;
+        public UserService(CometUserDBContext context, IMapper mapper, IEmailService emailServices)
         {
             this._dbContext = context;
             this.mapper = mapper;
+            this.emailServices = emailServices;
         }
 
         public async Task<APIResponse> ConfirmRegistration(int userId, string userName, string otpText)
@@ -271,7 +274,22 @@ namespace CometUserAPI.Container
 
         private async Task SendOtpMail(string userEmail, string optText, string name)
         {
+            var mailRequest = new MailRequest();
+            mailRequest.Email = userEmail;
+            mailRequest.Subject = "Thanks for registering : OPT";
+            mailRequest.EmailBody = GenerateEmailBody(name, optText);
+            await this.emailServices.SendEmail(mailRequest);
+        }
 
+        private string GenerateEmailBody(string name, string optText)
+        {
+            string emailBody = string.Empty;
+            emailBody = "<div style='width:100%; background-color:grey'>";
+            emailBody += "<h1>Hi " + name + ", Thanks for registering</h1>";
+            emailBody += "<h2>Please enter OPT text and complete registration</h2>";
+            emailBody += "<h2>QTP Text is : " + optText  + "</h2>";
+            emailBody += "</div>";
+            return emailBody;
         }
 
         private async Task<bool> ValidatePwdHistory(string userName, string password)
