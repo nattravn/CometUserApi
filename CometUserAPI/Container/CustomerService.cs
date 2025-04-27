@@ -79,7 +79,7 @@ namespace CometUserAPI.Container
                 } else
                 {
                     response.ResponseCode = 201;
-                    response.ErrorMessage = "Data not found";
+                    response.Message = "Data not found";
                 }
                 
             }
@@ -111,7 +111,7 @@ namespace CometUserAPI.Container
                 else
                 {
                     response.ResponseCode = 201;
-                    response.ErrorMessage = "Data not found";
+                    response.Message = "Data not found";
                 }
 
             }

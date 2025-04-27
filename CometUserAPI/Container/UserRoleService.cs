@@ -55,7 +55,7 @@ namespace CometUserAPI.Container
                 else
                 {
                     response.Result = "fail";
-                    response.ErrorMessage = "please proceed with minimum 1 record";
+                    response.Message = "please proceed with minimum 1 record";
                 }
             }
             catch (Exception ex) {

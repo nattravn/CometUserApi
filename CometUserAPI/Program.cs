@@ -18,7 +18,9 @@ using System.Text;
 
 // Tutorial https://www.youtube.com/watch?v=zNRVz7dgfuE
 // https://www.youtube.com/watch?v=SIdgC4bqNZ4&t=1659s
+// https://www.youtube.com/watch?v=e0n_Ai-n_TI&ab_channel=NihiraTechiees
 // https://www.youtube.com/watch?v=8J3nuUegtL4
+// https://github.com/nihira2020/WEBAPI_CORE_7
 
 var builder = WebApplication.CreateBuilder(args);
 

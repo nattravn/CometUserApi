@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using CometUserAPI.Constants;
 using CometUserAPI.Entities;
 using CometUserAPI.Helper;
 using CometUserAPI.Model;
 using CometUserAPI.Service;
+using DocumentFormat.OpenXml.Spreadsheet;
 using MailKit;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Net;
 
 namespace CometUserAPI.Container
 {
@@ -28,7 +32,7 @@ namespace CometUserAPI.Container
             if (!otpResponse)
             {
                 response.Result = "fail";
-                response.ErrorMessage = "Invalid OTP or Expired";
+                response.Message = "Invalid OTP or Expired";
             } 
             else
             {
@@ -78,7 +82,7 @@ namespace CometUserAPI.Container
             else
             {
                 response.Result = "fail";
-                response.ErrorMessage = "Failed to validate old password";
+                response.Message = "Failed to validate old password";
             }
 
             return response;
@@ -98,7 +102,7 @@ namespace CometUserAPI.Container
                 {
                     isValid = false;
                     response.Result = "fail";
-                    response.ErrorMessage = "Duplicated user name";
+                    response.Message = "Duplicated user name";
                 }
 
                 // duplicate Email
@@ -107,7 +111,7 @@ namespace CometUserAPI.Container
                 {
                     isValid = false;
                     response.Result = "fail";
-                    response.ErrorMessage = "Duplicated email";
+                    response.Message = "Duplicated email";
                 }
 
                 if (userRegistration != null && isValid)
@@ -125,13 +129,17 @@ namespace CometUserAPI.Container
                     userId = _tempUser.Id;
                     string otpText = GenerateRandomNumber();
                     await UpdateOtp(userRegistration.UserName, otpText, "register");
-                    await SendOtpMail(userRegistration.Email, otpText, userRegistration.Name);
-                    response.Result = "Pass! Id:" + userId.ToString();
+                    //await SendOtpMail(userRegistration.Email, otpText, userRegistration.Name);
+
+                    response.Result = "pass";
+                    response.ResponseCode = (int)HttpStatusCode.OK;
+                    response.Message = userId.ToString();
                 }
             }
             catch (Exception ex)
             {
-                response.Result = "fail";
+                response.Result = APIResponseStatus.Fail;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -149,7 +157,7 @@ namespace CometUserAPI.Container
             } else
             {
                 response.Result = "Failed";
-                response.ErrorMessage = "Invalid user";
+                response.Message = "Invalid user";
             }
             
             return response;
@@ -166,7 +174,7 @@ namespace CometUserAPI.Container
                 if (pwdHistory)
                 {
                     response.Result = "fail";
-                    response.ErrorMessage = "Failed to validate old password that used in last 3 transaction";
+                    response.Message = "Failed to validate old password that used in last 3 transaction";
                 }
                 else
                 {
@@ -183,7 +191,7 @@ namespace CometUserAPI.Container
             else
             {
                 response.Result = "Failed";
-                response.ErrorMessage = "Invalid OTP";
+                response.Message = "Invalid OTP";
             }
             return response;
         }
@@ -201,7 +209,7 @@ namespace CometUserAPI.Container
             } else
             {
                 response.Result = "Failed";
-                response.ErrorMessage = "Invalid user";
+                response.Message = "Invalid user";
             }
             return response;
         }
@@ -220,7 +228,7 @@ namespace CometUserAPI.Container
             else
             {
                 response.Result = "Failed";
-                response.ErrorMessage = "Invalid user";
+                response.Message = "Invalid user";
             }
             return response;
         }

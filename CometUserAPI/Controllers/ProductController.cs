@@ -44,7 +44,7 @@ namespace CometUserAPI.Controllers
             }
             catch (Exception ex)
             {
-                response.ErrorMessage=ex.Message;
+                response.Message=ex.Message;
             }
             return Ok(response);
         }
@@ -79,7 +79,7 @@ namespace CometUserAPI.Controllers
             catch (Exception ex)
             {
                 errorCount++;
-                response.ErrorMessage = ex.Message;
+                response.Message = ex.Message;
             }
             response.ResponseCode = 200;
             response.Result = passCount + "Files uploaded &" + errorCount + "files failed";
@@ -113,7 +113,7 @@ namespace CometUserAPI.Controllers
             catch (Exception ex)
             {
                 errorCount++;
-                response.ErrorMessage = ex.Message;
+                response.Message = ex.Message;
             }
             response.ResponseCode = 200;
             response.Result = passCount + "Files uploaded &" + errorCount + "files failed";

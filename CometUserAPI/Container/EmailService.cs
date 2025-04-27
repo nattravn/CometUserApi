@@ -29,7 +29,16 @@ namespace CometUserAPI.Container
 
             smptp.CheckCertificateRevocation = false;
             smptp.Connect(emailSettings.Host, emailSettings.Port,SecureSocketOptions.StartTls);
-            smptp.Authenticate(emailSettings.Email, emailSettings.Password);
+            try
+            {
+                smptp.Authenticate(emailSettings.Email, emailSettings.Password);
+            }
+            catch (AuthenticationException ex)
+            {
+                Console.WriteLine($"Authentication error: {ex.Message}");
+                throw;
+            }
+            
             await smptp.SendAsync(email);
             smptp.Disconnect(true);
         }
