@@ -50,7 +50,7 @@ namespace CometUserAPI.Controllers
                 };
                 var token = tokenHandler.CreateToken(tokendesc);
                 var finalToken = tokenHandler.WriteToken(token);
-                return Ok(new TokenResponse() { Token = finalToken, RefreshToken = await this._refreshHandler.GenerateToken(userCred.username) });
+                return Ok(new TokenResponse() { Token = finalToken, RefreshToken = await this._refreshHandler.GenerateToken(userCred.username), UserRole = user.Role });
             }
             else
             {
@@ -92,7 +92,7 @@ namespace CometUserAPI.Controllers
                             SecurityAlgorithms.HmacSha256)
                             );
                         var _finalToken = tokenHandler.WriteToken(_newToken);
-                        return Ok(new TokenResponse() { Token = _finalToken, RefreshToken = await this._refreshHandler.GenerateToken(username) });
+                        return Ok(new TokenResponse() { Token = _finalToken, RefreshToken = await this._refreshHandler.GenerateToken(username), UserRole = token.UserRole });
                     } else
                     {
                         return Unauthorized();

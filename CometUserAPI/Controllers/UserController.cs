@@ -30,13 +30,13 @@ namespace CometUserAPI.Controllers
         }
 
         [HttpPost("resetpassword")]
-        public async Task<ActionResult> resetPassword(string userName, string oldPassword, string newPassword)
+        public async Task<ActionResult> resetPassword(ResetPassword _data)
         {
-            var data = await this._userService.ResetPassword(userName, oldPassword, newPassword);
+            var data = await this._userService.ResetPassword(_data.userName, _data.oldPassword, _data.newPassword);
             return Ok(data);
         }
 
-        [HttpPost("forgetpassword")]
+        [HttpGet("forgetpassword")]
         public async Task<ActionResult> forgetPassword(string userName)
         {
             var data = await this._userService.ForgetPassword(userName);
