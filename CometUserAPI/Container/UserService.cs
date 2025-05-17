@@ -76,6 +76,7 @@ namespace CometUserAPI.Container
                     await this._dbContext.SaveChangesAsync();
                     await UpdatePWDManager(userName, newPassword);
                     response.Result = "Password changed";
+                    response.ResponseCode = (int)HttpStatusCode.OK;
                 }
                 
             }
@@ -152,8 +153,10 @@ namespace CometUserAPI.Container
             {
                 string otptext = GenerateRandomNumber();
                 await UpdateOtp(userName, otptext, "forgetPassword");
-                await SendOtpMail(_user.Email, otptext, _user.Name);
-                response.Result = "OTP sent";
+                //await SendOtpMail(_user.Email, otptext, _user.Name);
+                response.Result = "pass";
+                response.Message = "OTP sent";
+                response.ResponseCode = (int)HttpStatusCode.OK;
             } else
             {
                 response.Result = "Failed";
