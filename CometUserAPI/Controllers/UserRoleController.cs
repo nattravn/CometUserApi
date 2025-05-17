@@ -1,5 +1,6 @@
 ﻿using CometUserAPI.Entities;
 using CometUserAPI.Helper;
+using CometUserAPI.Model;
 using CometUserAPI.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ namespace CometUserAPI.Controllers
         [HttpGet("GetAllMenusByRole")]
         public async Task<ActionResult> GetAllMenusByRole(string userRole)
         {
-            var data = await this._roleService.GetAllMenusByRole(userRole);
+            List<AppMenu> data = await this._roleService.GetAllMenusByRole(userRole);
             if (data == null)
             {
                 return Ok(new List<TblMenu>());
