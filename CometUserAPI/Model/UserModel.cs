@@ -47,14 +47,14 @@ namespace CometUserAPI.Model
 
     public class Updatestatus
     {
-        public string username { get; set; }
+        public string userName { get; set; }
         public bool status { get; set; }
     }
 
     public class UpdateRole
     {
-        public string username { get; set; }
-        public string role { get; set; }
+        public string userName { get; set; }
+        public string userRole { get; set; }
     }
 }
 

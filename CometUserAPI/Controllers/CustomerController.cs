@@ -67,7 +67,7 @@ namespace CometUserAPI.Controllers
             return Ok(data);
         }
 
-        [HttpPut("Remove")]
+        [HttpDelete("Remove")]
         public async Task<IActionResult> Remove(string code)
         {
             var data = await this._customerService.Remove(code);

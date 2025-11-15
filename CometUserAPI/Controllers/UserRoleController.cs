@@ -18,8 +18,8 @@ namespace CometUserAPI.Controllers
             this._roleService = roleService;
         }
 
-        [HttpPost("assignpermission")]
-        public async Task<ActionResult> assignRolePermission(List<TblRolepermission> rolePermissions)
+        [HttpPost("assignrolepermission")]
+        public async Task<ActionResult> assignRolePermission(List<MenuPermission> rolePermissions)
         {
             var data = await this._roleService.AssignRolePermission(rolePermissions);
             return Ok(data);

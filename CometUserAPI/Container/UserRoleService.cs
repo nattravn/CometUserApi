@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿using AutoMapper;
+using Azure;
 using CometUserAPI.Entities;
 using CometUserAPI.Helper;
 using CometUserAPI.Model;
@@ -11,51 +12,58 @@ namespace CometUserAPI.Container
     public class UserRoleService: IUserRoleService
     {
         private readonly CometUserDBContext _dbContext;
-        public UserRoleService(CometUserDBContext context) { 
+        private readonly IMapper _mapper;
+        public UserRoleService(CometUserDBContext context, IMapper mapper) { 
             this._dbContext = context;
+            this._mapper = mapper;
         }
 
-        public async Task<APIResponse> AssignRolePermission(List<TblRolepermission> _data)
+        public async Task<APIResponse> AssignRolePermission(List<MenuPermission> _data)
         {
             APIResponse response = new APIResponse();
             int processCount = 0;
             try
             {
-                using(var dbtransaction = await this._dbContext.Database.BeginTransactionAsync())
-                if (_data.Count > 0)
+                using (var dbtransaction = await this._dbContext.Database.BeginTransactionAsync())
                 {
-                    _data.ForEach(item =>
+                    if (_data.Count > 0)
                     {
-                        var userData = this._dbContext.TblRolepermissions.FirstOrDefault(item1 => item1.Userrole == item.Userrole && item1.Menucode == item.Menucode);
-                        if(userData != null)
+                        foreach (var item in _data)
                         {
-                            userData.Haveview = item.Haveview;
-                            userData.Haveadd = item.Haveadd;
-                            userData.Haveedit = item.Haveedit;
-                            userData.Havedelete = item.Havedelete;
-                            processCount++;
-                        } else
-                        {
-                            this._dbContext.TblRolepermissions.Add(item);
-                            processCount++;
-                        }
-                    });
+                            var userData = this._dbContext.TblRolepermissions.FirstOrDefault(item1 => item1.Userrole == item.Userrole && item1.Menucode == item.Menucode);
+                            if (userData != null)
+                            {
+                                userData.Haveview = item.Haveview;
+                                userData.Haveadd = item.Haveadd;
+                                userData.Haveedit = item.Haveedit;
+                                userData.Havedelete = item.Havedelete;
+                                processCount++;
+                            }
+                            else
+                            {
+                                var newEntity = _mapper.Map<TblRolepermission>(item); // Map MenuPermission → TblRolepermission
+                                this._dbContext.TblRolepermissions.Add(newEntity);
+                                processCount++;
+                            }
+                        };
 
-                    if(_data.Count == processCount)
-                    {
-                        await this._dbContext.SaveChangesAsync();
-                        await dbtransaction.CommitAsync();
-                        response.Result = "Saved successfully";
+                        if (_data.Count == processCount)
+                        {
+                            await _dbContext.SaveChangesAsync();
+                            await dbtransaction.CommitAsync();
+
+                            response.Result = "pass";
+                        }
+                        else
+                        {
+                            await dbtransaction.RollbackAsync();
+                        }
                     }
                     else
                     {
-                        await dbtransaction.RollbackAsync();
+                        response.Result = "fail";
+                        response.Message = "please proceed with minimum 1 record";
                     }
-                }
-                else
-                {
-                    response.Result = "fail";
-                    response.Message = "please proceed with minimum 1 record";
                 }
             }
             catch (Exception ex) {
@@ -107,7 +115,7 @@ namespace CometUserAPI.Container
 
             if(_data != null)
             {
-                menuPermission.Code = _data.Menucode;
+                menuPermission.Menucode = _data.Menucode;
                 menuPermission.Haveview = _data.Haveview;
                 menuPermission.Haveadd = _data.Haveadd;
                 menuPermission.Haveedit = _data.Haveedit;

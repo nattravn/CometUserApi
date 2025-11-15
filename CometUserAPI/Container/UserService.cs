@@ -181,13 +181,14 @@ namespace CometUserAPI.Container
                 }
                 else
                 {
-                    var _user = await _dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == userName && item.Islocked == true);
+                    var _user = await _dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == userName && item.Isactive == true);
                     if (_user != null)
                     {
                         _user.Password = password;
                         await UpdatePWDManager(userName, password);
                         await this._dbContext.SaveChangesAsync();
-                        response.Result = "Password changed!";
+                        response.Result = "Pass";
+                        response.Message = "Password changed!";
                     }
                 }
             } 
@@ -199,16 +200,16 @@ namespace CometUserAPI.Container
             return response;
         }
 
-        public async Task<APIResponse> UpdateStatus(string userName, bool userStatus)
+        public async Task<APIResponse> UpdateStatus(Updatestatus updateStatus)
         {
             APIResponse response = new APIResponse();
-            var _user = await this._dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == userName && item.Isactive == true);
+            var _user = await this._dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == updateStatus.userName);
 
             if (_user != null)
             {
-                _user.Isactive = userStatus;
+                _user.Isactive = updateStatus.status;
                 await this._dbContext.SaveChangesAsync();
-                response.Result = "Status changed";
+                response.Result = "pass";
             } else
             {
                 response.Result = "Failed";
@@ -217,16 +218,16 @@ namespace CometUserAPI.Container
             return response;
         }
 
-        public async Task<APIResponse> UpdateRole(string userName, string userRole)
+        public async Task<APIResponse> UpdateRole(UpdateRole updateRole)
         {
             APIResponse response = new APIResponse();
-            var _user = await this._dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == userName && item.Isactive == true);
+            var _user = await this._dbContext.TblUsers.FirstOrDefaultAsync(item => item.Username == updateRole.userName && item.Isactive == true);
 
             if (_user != null)
             {
-                _user.Role = userRole;
+                _user.Role = updateRole.userRole;
                 await this._dbContext.SaveChangesAsync();
-                response.Result = "User role changed";
+                response.Result = "pass";
             }
             else
             {

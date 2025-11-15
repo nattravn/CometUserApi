@@ -44,23 +44,23 @@ namespace CometUserAPI.Controllers
         }
 
         [HttpPost("updatepassword")]
-        public async Task<ActionResult> updatePassword(string userName, string password, string otpText)
+        public async Task<ActionResult> updatePassword(Updatepassword _data)
         {
-            var data = await this._userService.UpdatePassword(userName, password, otpText);
+            var data = await this._userService.UpdatePassword(_data.username, _data.password, _data.otptext);
             return Ok(data);
         }
 
         [HttpPost("updatestatus")]
-        public async Task<ActionResult> updateStatus(string userName, bool status)
+        public async Task<ActionResult> updateStatus(Updatestatus userStatus)
         {
-            var data = await this._userService.UpdateStatus(userName, status);
+            var data = await this._userService.UpdateStatus(userStatus);
             return Ok(data);
         }
 
         [HttpPost("updaterole")]
-        public async Task<ActionResult> updateRole(string userName, string role)
+        public async Task<ActionResult> updateRole(UpdateRole updateRole)
         {
-            var data = await this._userService.UpdateRole(userName, role);
+            var data = await this._userService.UpdateRole(updateRole);
             return Ok(data);
         }
 

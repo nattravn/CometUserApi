@@ -31,7 +31,7 @@ namespace CometUserAPI.Container
                 await this._context.TblCustomers.AddAsync(_customer);
                 await this._context.SaveChangesAsync();
                 response.ResponseCode = 201;
-                response.Result= data.Code;
+                response.Result= "pass";
             }
             catch (Exception ex) 
             {
@@ -75,7 +75,7 @@ namespace CometUserAPI.Container
                     this._context.TblCustomers.Remove(_customer);
                     await this._context.SaveChangesAsync();
                     response.ResponseCode = 201;
-                    response.Result = code;
+                    response.Result = "pass";
                 } else
                 {
                     response.ResponseCode = 201;
@@ -106,7 +106,7 @@ namespace CometUserAPI.Container
                     //_customer.CreditLimit = data.CreditLimit;
                     await this._context.SaveChangesAsync();
                     response.ResponseCode = 201;
-                    response.Result = code;
+                    response.Result = "pass";
                 }
                 else
                 {
